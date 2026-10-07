@@ -1,7 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	fmt.Println("Go-reloaded")
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: go run . <input.txt> <output.txt>")
+		return
+	}
+
+	data, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		fmt.Println("Erreur de lecture :", err)
+		return
+	}
+
+	err = os.WriteFile(os.Args[2], data, 0644)
+	if err != nil {
+		fmt.Println("Erreur d'écriture :", err)
+		return
+	}
 }
