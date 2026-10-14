@@ -1,90 +1,76 @@
 package main
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
 )
 
-func changeCase(text string) string {
-	words := strings.Fields(text)
+var caseInstruction = regexp.MustCompile(`^\((up|low|cap)(?:,(\d+))?\)$`)
 
-	for i := 0; i < len(words); i++ {
-		switch {
-		case words[i] == "(up)":
-			changePreviousWords(words, i, 1, "up")
-			words[i] = ""
+func changeCase(words []string) []string {
+	result := make([]string, 0, len(words))
 
-		case words[i] == "(low)":
-			changePreviousWords(words, i, 1, "low")
-			words[i] = ""
-
-		case words[i] == "(cap)":
-			changePreviousWords(words, i, 1, "cap")
-			words[i] = ""
-
-		case strings.HasPrefix(words[i], "(up,") && strings.HasSuffix(words[i], ")"):
-			number := getNumber(words[i])
-			changePreviousWords(words, i, number, "up")
-			words[i] = ""
-
-		case strings.HasPrefix(words[i], "(low,") && strings.HasSuffix(words[i], ")"):
-			number := getNumber(words[i])
-			changePreviousWords(words, i, number, "low")
-			words[i] = ""
-
-		case strings.HasPrefix(words[i], "(cap,") && strings.HasSuffix(words[i], ")"):
-			number := getNumber(words[i])
-			changePreviousWords(words, i, number, "cap")
-			words[i] = ""
+	for _, word := range words {
+		match := caseInstruction.FindStringSubmatch(word)
+		if match == nil {
+			result = append(result, word)
+			continue
 		}
+
+		count := 1
+		if match[2] != "" {
+			n, err := strconv.Atoi(match[2])
+			if err != nil {
+				n = len(result) 
+			}
+			count = n
+		}
+
+		applyCase(result, count, match[1])
 	}
 
-	return strings.Join(words, " ")
+	return result
 }
 
-func changePreviousWords(words []string, position int, number int, action string) {
-	start := position - number
 
-	if start < 0 {
-		start = 0
-	}
+func applyCase(words []string, count int, action string) {
+	for i := len(words) - 1; i >= 0 && count > 0; i-- {
+		if !hasLetterOrDigit(words[i]) {
+			continue
+		}
 
-	for i := start; i < position; i++ {
 		switch action {
 		case "up":
 			words[i] = strings.ToUpper(words[i])
-
 		case "low":
 			words[i] = strings.ToLower(words[i])
-
 		case "cap":
 			words[i] = capitalize(words[i])
 		}
+		count--
 	}
 }
 
-func getNumber(instruction string) int {
-	instruction = strings.TrimPrefix(instruction, "(up,")
-	instruction = strings.TrimPrefix(instruction, "(low,")
-	instruction = strings.TrimPrefix(instruction, "(cap,")
-	instruction = strings.TrimSuffix(instruction, ")")
-	instruction = strings.TrimSpace(instruction)
-
-	number, err := strconv.Atoi(instruction)
-
-	if err != nil {
-		return 1
+func hasLetterOrDigit(word string) bool {
+	for _, r := range word {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			return true
+		}
 	}
-
-	return number
+	return false
 }
+
 
 func capitalize(word string) string {
 	runes := []rune(strings.ToLower(word))
 
-	if len(runes) > 0 {
-		runes[0] = unicode.ToUpper(runes[0])
+	for i, r := range runes {
+		if unicode.IsLetter(r) {
+			runes[i] = unicode.ToUpper(r)
+			break
+		}
 	}
 
 	return string(runes)
