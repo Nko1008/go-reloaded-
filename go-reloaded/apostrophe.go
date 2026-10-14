@@ -1,28 +1,51 @@
+
 package main
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
+
+func isQuote(runes []rune, i int) bool {
+	if runes[i] != '\'' {
+		return false
+	}
+
+	prevLetter := i > 0 && unicode.IsLetter(runes[i-1])
+	nextLetter := i+1 < len(runes) && unicode.IsLetter(runes[i+1])
+
+	return !(prevLetter && nextLetter)
+}
 
 func fixApostrophes(text string) string {
-	words := strings.Fields(text)
-	result := []string{}
+	runes := []rune(text)
 
-	inQuote := false
-
-	for _, word := range words {
-		if strings.HasPrefix(word, "'") {
-			inQuote = true
-		}
-
-		if inQuote && len(result) > 0 && !strings.HasPrefix(word, "'") {
-			result = append(result, word)
-		} else {
-			result = append(result, word)
-		}
-
-		if strings.HasSuffix(word, "'") {
-			inQuote = false
+	var quotes []int
+	for i := range runes {
+		if isQuote(runes, i) {
+			quotes = append(quotes, i)
 		}
 	}
 
-	return strings.Join(result, " ")
+	remove := make([]bool, len(runes))
+
+	for p := 0; p+1 < len(quotes); p += 2 {
+		open, closing := quotes[p], quotes[p+1]
+
+		for i := open + 1; i < closing && unicode.IsSpace(runes[i]); i++ {
+			remove[i] = true
+		}
+		for i := closing - 1; i > open && unicode.IsSpace(runes[i]); i-- {
+			remove[i] = true
+		}
+	}
+
+	var sb strings.Builder
+	for i, r := range runes {
+		if !remove[i] {
+			sb.WriteRune(r)
+		}
+	}
+
+	return sb.String()
 }
