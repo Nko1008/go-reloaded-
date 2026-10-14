@@ -7,33 +7,20 @@ import (
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println("Usage: go run . input.txt output.txt")
-		return
+		fmt.Fprintln(os.Stderr, "Usage: go run . input.txt output.txt")
+		os.Exit(1)
 	}
 
-	inputFile := os.Args[1]
-	outputFile := os.Args[2]
-
-	content, err := os.ReadFile(inputFile)
+	content, err := os.ReadFile(os.Args[1])
 	if err != nil {
-		fmt.Println("Erreur lors de la lecture du fichier :", err)
-		return
+		fmt.Fprintln(os.Stderr, "Erreur lors de la lecture du fichier :", err)
+		os.Exit(1)
 	}
 
-	text := string(content)
+	result := processText(string(content))
 
-	text = convertHex(text)
-	text = convertBin(text)
-	text = changeCase(text)
-	text = fixPunctuation(text)
-	text = fixApostrophes(text)
-	text = fixArticles(text)
-
-	err = os.WriteFile(outputFile, []byte(text), 0644)
-	if err != nil {
-		fmt.Println("Erreur lors de l'écriture du fichier :", err)
-		return
+	if err := os.WriteFile(os.Args[2], []byte(result), 0644); err != nil {
+		fmt.Fprintln(os.Stderr, "Erreur lors de l'écriture du fichier :", err)
+		os.Exit(1)
 	}
-
-	fmt.Println("Fichier créé avec succès !")
 }
