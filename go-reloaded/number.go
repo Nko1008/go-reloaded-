@@ -1,26 +1,21 @@
 package main
 
-import (
-	"fmt"
-	"os"
-)
+import "strconv"
 
-func main() {
-	if len(os.Args) != 3 {
-		fmt.Fprintln(os.Stderr, "Usage: go run . input.txt output.txt")
-		os.Exit(1)
+func convertBase(words []string, marker string, base int) []string {
+	result := make([]string, 0, len(words))
+
+	for _, word := range words {
+		if word == marker && len(result) > 0 {
+			number, err := strconv.ParseInt(result[len(result)-1], base, 64)
+			if err == nil {
+				result[len(result)-1] = strconv.FormatInt(number, 10)
+				continue
+			}
+		}
+		result = append(result, word)
 	}
 
-	content, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Erreur lors de la lecture du fichier :", err)
-		os.Exit(1)
-	}
-
-	result := processText(string(content))
-
-	if err := os.WriteFile(os.Args[2], []byte(result), 0644); err != nil {
-		fmt.Fprintln(os.Stderr, "Erreur lors de l'écriture du fichier :", err)
-		os.Exit(1)
-	}
+	return result
 }
+
