@@ -32,10 +32,10 @@ go run . input.txt output.txt
 Exemple :
 
 ```bash
-go run . sample.txt result.txt
+go run . texte.txt result.txt
 ```
 
-Le fichier `sample.txt` est lu, les transformations sont appliquées, puis le résultat est écrit dans `result.txt`.
+Le fichier `texte.txt` est lu, les transformations sont appliquées, puis le résultat est écrit dans `result.txt`.
 
 ## Structure du projet
 
@@ -43,13 +43,16 @@ Le fichier `sample.txt` est lu, les transformations sont appliquées, puis le r�
 go-reloaded/
 ├── go.mod
 ├── main.go
+├── processus.go
+├── number.go
 ├── hex.go
 ├── bin.go
 ├── case.go
 ├── punctuation.go
 ├── apostrophe.go
 ├── article.go
-├── sample.txt
+├── main_test.go
+├── texte.txt
 └── README.md
 ```
 
@@ -59,10 +62,17 @@ go-reloaded/
 
 ## Tests
 
-Pour tester le programme, créer un fichier texte contenant les différentes instructions, puis lancer :
+Lancer les tests unitaires :
 
 ```bash
-go run . sample.txt result.txt
+go test ./...
 ```
 
-Le résultat peut ensuite être consulté dans le fichier de sortie.# go-reloaded-
+Tester manuellement le programme :
+
+```bash
+go run . texte.txt result.txt
+cat result.txt
+```
+
+Le résultat est écrit dans le fichier de sortie.
