@@ -1,0 +1,5 @@
+bonjour (cap) c'etait une belle journee, mais la suite etait encore mieux (up) , nous avons visite 42 (hex) monuments et parcouru 10 (bin) kilometres.
+ce projet est vraiment interessant (up, 2) et il permet d'apprendre beaucoup de choses.
+il n'y a pas de plus grande joie que de raconter une histoire incroyable.
+les tests de ponctuation sont ... parfois un peu ennuyeux ,qu'en pensez-vous ?
+comme elle le disait : ' quelle belle journee '
