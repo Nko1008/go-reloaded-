@@ -33,4 +33,4 @@ func startsWithVowelOrH(word string) bool {
 		return strings.ContainsRune("aeiouh", unicode.ToLower(r))
 	}
 	return false
-}x
+}
