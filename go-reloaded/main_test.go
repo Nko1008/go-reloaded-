@@ -14,16 +14,16 @@ func TestProcessText(t *testing.T) {
 		{"majuscules", "Pret, partez, go (up) !", "Pret, partez, GO!"},
 		{"minuscules", "Arrete de CRIER (low)", "Arrete de crier"},
 		{"premiere lettre en majuscule", "Le pont de Brooklyn bridge (cap)", "Le pont de Brooklyn Bridge"},
-		{"majuscules sur deux mots", "Ce jeu est vraiment genial (up, 2)", "Ce jeu est VRAIMENT GENIAL"}, // corrigé
-		{"majuscule sur trois mots", "bonjour tout le monde (cap,3)", "bonjour Tout Le Monde"},           // corrigé
+		{"majuscules sur deux mots", "Ce jeu est vraiment genial (up, 2)", "Ce jeu est VRAIMENT GENIAL"}, 
+		{"majuscule sur trois mots", "bonjour tout le monde (cap,3)", "bonjour Tout Le Monde"},           
 		{"nombre superieur au nombre de mots", "tres bien (up, 10)", "TRES BIEN"},
 		{"plusieurs transformations", "bonjour (cap) tout va bien (up)", "Bonjour tout va BIEN"},
 		{"correction de la ponctuation", "Je suis passe par la ,et ensuite BOUM !!", "Je suis passe par la, et ensuite BOUM!!"},
 		{"points de suspension", "Cette histoire est ... assez longue ,tu ne trouves pas ?", "Cette histoire est... assez longue, tu ne trouves pas?"},
 		{"ponctuation en debut de texte", ", bonjour", ", bonjour"},
 		{"nombres avec ponctuation", "Le prix est 3.14 euros et le numero est 1,000", "Le prix est 3.14 euros et le numero est 1,000"},
-		{"apostrophes autour d'un mot", "Ce mot est : ' genial '", "Ce mot est: 'genial'"},                                   // corrigé
-		{"apostrophes autour d'une phrase", "Elle a dit : ' je suis tres contente '", "Elle a dit: 'je suis tres contente'"}, // corrigé
+		{"apostrophes autour d'un mot", "Ce mot est : ' genial '", "Ce mot est: 'genial'"},                                   
+		{"apostrophes autour d'une phrase", "Elle a dit : ' je suis tres contente '", "Elle a dit: 'je suis tres contente'"}, 
 		{"apostrophe dans un mot", "aujourd'hui tout va bien", "aujourd'hui tout va bien"},
 		{"remplacement de a par an", "Il raconte a histoire incroyable", "Il raconte an histoire incroyable"},
 		{"article avec majuscule", "C'etait A incroyable aventure", "C'etait An incroyable aventure"},
